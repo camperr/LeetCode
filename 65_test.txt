@@ -1,0 +1,28 @@
+ 10.0_True
+ 0.0_True
+0 .0_False
+00.0_True
+0010_True
+100a_False
+-10_True
+0-10_False
+--10_False
+0..19_False
+e19_False
+1e19e_False
+10.0_True
+10.0a3_False
+- 10_True
+10. 0_False
+100_True
+10.0 _True
+1e10_True
+a1_False
+ - 10 _True
+ - 10. 0_False
+ - 1.0e- 3_False
+ - 1.0e-3_True
+ - 1.0e-3.2_False
+ 。1_False
+ -_False
+ ' '_False
