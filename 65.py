@@ -1,44 +1,48 @@
 import re
-def is_positive_int(numstr):
-    for c in numstr:
-        if c < '0' or c > '9':
+
+def is_digit(s, p):
+    if p < 0 or p >= len(s):
+        return False
+    return '0' <= s[p] <= '9'
+
+def is_int(s, sign_allow = True):
+    if len(s) == 0:
+        return False
+    if s[0] in ('+', '-'):
+        if not sign_allow or len(s) == 1:
+            return False
+        s = s[1:]
+    for i in range(len(s)):
+        if not is_digit(s, i):
             return False
     return True
+
+def is_decimal(s, sign_allow = True):
+    parts = s.split('.')
+    if len(s) == 0 or len(parts) > 2:
+        return False
+    if len(parts) == 1:
+        return is_int(s, sign_allow)
+    if len(parts) == 2:
+        l_int = is_int(parts[0], sign_allow)
+        r_int = is_int(parts[1], sign_allow = False)
+        l_nul = (parts[0] == '' or parts[0] in ('-', '+'))
+        r_nul = (parts[1] == '')
+        return (l_int and r_int) or (l_int and r_nul) or (l_nul and r_int)
+
 def solve(numstr):
     ns = numstr.strip()
     ns = re.sub(r'\s+', ' ', ns)
     if len(ns) == 0:
         return False
     
-    point_allow = True
-    e_allow = True
-    
-    for i, c in enumerate(ns):
-        if c <'0' or c > '9':
-            if c not in ('e', '.', '-', '+', ' '):
-                return False
-            if len(ns) == 1:
-                return False
-            if c in ('-', '+') and i > 0:
-                if ns[i-1] == 'e':
-                    return is_positive_int(ns[i+1:])
-                else:
-                    return False
-            if c == ' ':
-                if ns[i-1] not in ('-', '+'):
-                    return False
-            if c == '.':
-                if not point_allow or i == 0:
-                    return False
-                point_allow = False
-            if c == 'e':
-                if not e_allow or i == 0:
-                    return False
-                if i < len(ns) - 1 and ns[i+1] not in ('-', '+'):
-                    return is_positive_int(ns[i+1:])
-                e_allow = False
-                point_allow = False
-    return True
+    parts = ns.split('e')
+    if len(parts) > 2:
+        return False
+    if len(parts) == 1:
+        return is_decimal(ns, sign_allow = True)
+    if len(parts) == 2:
+        return is_decimal(parts[0], sign_allow = True) and is_int(parts[1], sign_allow = True)
 
 def main():
     with open('65_test.txt','r') as tf:
