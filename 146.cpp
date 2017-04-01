@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <iostream>
 using namespace std;
-const int HASH_BASE = 3;
+const int HASH_BASE = 1000001;
 struct Entry{
     int key;
     int v;
